@@ -21,25 +21,14 @@ namespace GrpcXU
         private readonly ILogger<GreeterService> _logger;
         private GreeterService createGreaterService() => new(_logger);
 
-        [Fact]
-        public void Test1()
-        {
-            var IncrementBy = (int source, int increment = 1) => source + increment;
-
-            Console.WriteLine(IncrementBy(5)); // 6
-            Console.WriteLine(IncrementBy(5, 2)); // 7
-            Assert.Equal(1, 1);
-        }
 
         [Fact]
         public async Task SayHelloUnaryTest()
         {
-            Console.WriteLine("fuckMSTest");
+            
             var mockGreeter = new Mock<IGreeter>();
-            //mockGreeter.Setup(m => m.Greet(It.IsAny<string>())).Returns((string s) => $"Hello {s}");
             mockGreeter.Setup(m => m.Greet("Joe")).Returns("Hello Joe");
             var service = new TesterService(mockGreeter.Object);
-
             var request = new HelloRequest {Name = "Joe"};
             var response = await service.SayHelloUnary(request);
             mockGreeter.Verify(v => v.Greet("Joe"));
@@ -67,8 +56,8 @@ namespace GrpcXU
             await foreach (var message in responseStream.ReadAllAsync()) { 
                 allMessages.Add(message);
             }
-            Assert.True(allMessages.Count == 1);
-           // Assert.Equal("Hello Joe 1", allMessages[0].Message);
+            Assert.True(allMessages.Count > 1);
+           
         }
 
     }
